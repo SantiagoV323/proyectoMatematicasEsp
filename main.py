@@ -5,6 +5,10 @@ import matplotlib.pyplot as plt
 import sympy as sp
 import numpy as np
 
+# Función para insertar texto en el campo de entrada
+def insert_text(entry, text):
+    entry.insert(tk.END, text)
+
 # Función para agregar un placeholder a un Entry
 def set_placeholder(entry, placeholder_text):
     entry.insert(0, placeholder_text)
@@ -45,25 +49,31 @@ def main():
     entry_func.pack(side=tk.LEFT, padx=5)
 
     # Agregar el placeholder al campo de entrada
-    set_placeholder(entry_func, "Ejemplo: z**2 + 1")
+    set_placeholder(entry_func, "Ejemplo: z**2 + sqrt(z)")
 
     btn_plot = tk.Button(frame_input, text="Graficar", font=font_style, bg="#007BFF", fg="white",
                          command=lambda: plot_function(entry_func.get(), canvas))
     btn_plot.pack(side=tk.LEFT, padx=10)
 
-    frame_range = tk.Frame(root, bg="#f0f0f0")
-    frame_range.pack(pady=10)
+    # Botones para ingresar símbolos matemáticos
+    frame_buttons = tk.Frame(root, bg="#f0f0f0")
+    frame_buttons.pack(pady=10)
 
-    lbl_range = tk.Label(frame_range, text="Rango (mínimo y máximo):", font=font_style, bg="#f0f0f0")
-    lbl_range.pack(side=tk.LEFT, padx=5)
+    buttons = [
+        ("√", "sqrt("),
+        ("e^", "exp("),
+        ("ln", "log("),
+        ("z²", "z**2"),
+        ("|z|", "abs(z)"),
+        ("sin", "sin("),
+        ("cos", "cos("),
+        ("tan", "tan(")
+    ]
 
-    entry_min = tk.Entry(frame_range, font=("Helvetica", 12), width=10)
-    entry_min.insert(0, "-10")
-    entry_min.pack(side=tk.LEFT, padx=5)
-
-    entry_max = tk.Entry(frame_range, font=("Helvetica", 12), width=10)
-    entry_max.insert(0, "10")
-    entry_max.pack(side=tk.LEFT, padx=5)
+    for text, value in buttons:
+        btn = tk.Button(frame_buttons, text=text, font=font_style, bg="#E0E0E0", fg="black",
+                        command=lambda v=value: insert_text(entry_func, v))
+        btn.pack(side=tk.LEFT, padx=5)
 
     frame_plot = tk.Frame(root, bg="#f0f0f0")
     frame_plot.pack(pady=20, fill=tk.BOTH, expand=True)
