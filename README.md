@@ -18,7 +18,6 @@
   - [5. Visualización de Funciones en el Plano Complejo](#5-visualización-de-funciones-en-el-plano-complejo)
       - [Ejemplo de Visualización:](#ejemplo-de-visualización)
   - [6. Integración y Pruebas](#6-integración-y-pruebas)
-  - [7. Mejoras y Funcionalidades Adicionales](#7-mejoras-y-funcionalidades-adicionales)
 
 ---
 
