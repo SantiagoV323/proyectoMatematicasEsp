@@ -4,6 +4,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
 import sympy as sp
 import numpy as np
+import sys  # Importar sys para salir del programa
 
 # Función para insertar texto en el campo de entrada
 def insert_text(entry, text):
@@ -26,6 +27,12 @@ def set_placeholder(entry, placeholder_text):
 
     entry.bind("<FocusIn>", on_focus_in)
     entry.bind("<FocusOut>", on_focus_out)
+
+# Función para manejar el cierre de la ventana
+def on_closing(root):
+    if tk.messagebox.askokcancel("Salir", "¿Estás seguro de que quieres cerrar el programa?"):
+        root.destroy()  # Destruir la ventana de Tkinter
+        sys.exit()  # Detener el script de Python
 
 def main():
     root = tk.Tk()
@@ -55,7 +62,6 @@ def main():
                          command=lambda: plot_function(entry_func.get(), canvas))
     btn_plot.pack(side=tk.LEFT, padx=10)
 
-    # Botones para ingresar símbolos matemáticos
     frame_buttons = tk.Frame(root, bg="#f0f0f0")
     frame_buttons.pack(pady=10)
 
@@ -81,6 +87,9 @@ def main():
     fig, ax = plt.subplots()
     canvas = FigureCanvasTkAgg(fig, master=frame_plot)
     canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
+
+    # Interceptar el evento de cierre
+    root.protocol("WM_DELETE_WINDOW", lambda: on_closing(root))
 
     root.mainloop()
 
