@@ -114,18 +114,33 @@ def plot_function(func_str, canvas):
         ax = canvas.figure.axes[0]
         ax.clear()
 
-        im = ax.imshow(magnitude, extent=[x_min, x_max, x_min, x_max], origin='lower', cmap='viridis', alpha=0.5)
-        plt.colorbar(im, ax=ax, label='|f(z)|')
+        # Configurar un eje dedicado para la barra de color
+        if len(canvas.figure.axes) == 1:  # Si solo existe el eje principal
+            cbar_ax = canvas.figure.add_axes([0.85, 0.15, 0.05, 0.7])  # Eje fijo para la barra de color
+        else:
+            cbar_ax = canvas.figure.axes[1]  # Reutilizar el eje de la barra de color existente
 
+        # Limpiar la barra de color existente
+        cbar_ax.clear()
+
+        # Graficar el nuevo módulo como fondo
+        im = ax.imshow(magnitude, extent=[x_min, x_max, x_min, x_max], origin='lower', cmap='viridis', alpha=0.5)
+
+        # Añadir barra de color en el eje dedicado
+        cbar = canvas.figure.colorbar(im, cax=cbar_ax)
+        cbar.set_label('|f(z)|', fontsize=12)
+
+        # Graficar líneas de flujo
         ax.streamplot(X, Y, U, V, color='blue', density=1, linewidth=1, arrowsize=1.5)
 
         ax.set_title(f"Visualización de f(z) = {func_str}", fontsize=14)
         ax.set_xlabel("Re(z)")
         ax.set_ylabel("Im(z)")
 
+        # Actualizar la gráfica
         canvas.draw()
     except Exception as e:
-        tk.messagebox.showerror("Error", f"Por favor, revise su ecuación. Asegúrese de que sea válida.")
+        tk.messagebox.showerror("Error", "Por favor, revise su ecuación. Asegúrese de que sea válida.")
 
 if __name__ == "__main__":
     main()
