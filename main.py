@@ -125,7 +125,7 @@ def plot_function(func_str, canvas):
 
         canvas.draw()
     except Exception as e:
-        tk.messagebox.showerror("Error", f"Hubo un error al procesar la función:\n{e}")
+        tk.messagebox.showerror("Error", f"Por favor, revise su ecuación. Asegúrese de que sea válida.")
 
 if __name__ == "__main__":
     main()
