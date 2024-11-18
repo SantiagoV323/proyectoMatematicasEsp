@@ -1,78 +1,92 @@
+
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import ttk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
 import sympy as sp
 import numpy as np
 
-# Función principal
 def main():
-    # Crear la ventana principal
     root = tk.Tk()
     root.title("Visualizador de Funciones de Variables Complejas")
-    root.geometry("800x600")
+    root.geometry("900x700")
+    root.configure(bg="#f0f0f0")
 
-    # Etiqueta y campo de entrada para la función
-    lbl_func = tk.Label(root, text="Ingrese la función f(z):")
-    lbl_func.pack(pady=10)
+    font_style = ("Helvetica", 12)
+    title_font = ("Helvetica", 14, "bold")
 
-    entry_func = tk.Entry(root, width=50)
-    entry_func.pack(pady=5)
+    lbl_title = tk.Label(root, text="Visualizador de Funciones Complejas", font=title_font, bg="#f0f0f0", fg="#333")
+    lbl_title.pack(pady=15)
 
-    # Botón para generar la gráfica
-    btn_plot = tk.Button(root, text="Graficar", command=lambda: plot_function(entry_func.get(), canvas))
-    btn_plot.pack(pady=10)
+    frame_input = tk.Frame(root, bg="#f0f0f0")
+    frame_input.pack(pady=10)
 
-    # Área para la gráfica
+    lbl_func = tk.Label(frame_input, text="Ingrese la función f(z):", font=font_style, bg="#f0f0f0")
+    lbl_func.pack(side=tk.LEFT, padx=5)
+
+    entry_func = tk.Entry(frame_input, font=("Helvetica", 12), width=40)
+    entry_func.pack(side=tk.LEFT, padx=5)
+
+    btn_plot = tk.Button(frame_input, text="Graficar", font=font_style, bg="#007BFF", fg="white",
+                         command=lambda: plot_function(entry_func.get(), canvas))
+    btn_plot.pack(side=tk.LEFT, padx=10)
+
+    frame_range = tk.Frame(root, bg="#f0f0f0")
+    frame_range.pack(pady=10)
+
+    lbl_range = tk.Label(frame_range, text="Rango (mínimo y máximo):", font=font_style, bg="#f0f0f0")
+    lbl_range.pack(side=tk.LEFT, padx=5)
+
+    entry_min = tk.Entry(frame_range, font=("Helvetica", 12), width=10)
+    entry_min.insert(0, "-10")
+    entry_min.pack(side=tk.LEFT, padx=5)
+
+    entry_max = tk.Entry(frame_range, font=("Helvetica", 12), width=10)
+    entry_max.insert(0, "10")
+    entry_max.pack(side=tk.LEFT, padx=5)
+
+    frame_plot = tk.Frame(root, bg="#f0f0f0")
+    frame_plot.pack(pady=20, fill=tk.BOTH, expand=True)
+
     fig, ax = plt.subplots()
-    canvas = FigureCanvasTkAgg(fig, master=root)
+    canvas = FigureCanvasTkAgg(fig, master=frame_plot)
     canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
 
-    # Ejecutar el loop principal
     root.mainloop()
 
-# Función para graficar
 def plot_function(func_str, canvas):
     try:
         z = sp.symbols('z')
         func = sp.sympify(func_str)
 
-        # Crear una malla de puntos en el plano complejo
-        x = np.linspace(-10, 10, 400)
-        y = np.linspace(-10, 10, 400)
+        x_min, x_max = -10, 10
+        x = np.linspace(x_min, x_max, 400)
+        y = np.linspace(x_min, x_max, 400)
         X, Y = np.meshgrid(x, y)
         Z = X + 1j * Y
 
-        # Evaluar la función
         f_Z = sp.lambdify(z, func, 'numpy')(Z)
-
-        # Obtener partes reales e imaginarias
         U = np.real(f_Z)
         V = np.imag(f_Z)
 
-        # Obtener módulo y fase
         magnitude = np.abs(f_Z)
         phase = np.angle(f_Z)
 
-        # Limpiar la gráfica anterior
         ax = canvas.figure.axes[0]
         ax.clear()
 
-        # Graficar módulo como fondo
-        im = ax.imshow(magnitude, extent=[-10,10,-10,10], origin='lower', cmap='viridis', alpha=0.5)
+        im = ax.imshow(magnitude, extent=[x_min, x_max, x_min, x_max], origin='lower', cmap='viridis', alpha=0.5)
         plt.colorbar(im, ax=ax, label='|f(z)|')
 
-        # Graficar líneas de flujo
         ax.streamplot(X, Y, U, V, color='blue', density=1, linewidth=1, arrowsize=1.5)
 
-        ax.set_title(f"Visualización de f(z) = {func_str}")
+        ax.set_title(f"Visualización de f(z) = {func_str}", fontsize=14)
         ax.set_xlabel("Re(z)")
         ax.set_ylabel("Im(z)")
 
-        # Actualizar la gráfica
         canvas.draw()
     except Exception as e:
-        messagebox.showerror("Error", f"Hubo un error al procesar la función:\n{e}")
+        tk.messagebox.showerror("Error", f"Hubo un error al procesar la función:\n{e}")
 
 if __name__ == "__main__":
     main()
