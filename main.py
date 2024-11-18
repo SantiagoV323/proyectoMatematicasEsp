@@ -1,10 +1,27 @@
-
 import tkinter as tk
 from tkinter import ttk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import matplotlib.pyplot as plt
 import sympy as sp
 import numpy as np
+
+# Función para agregar un placeholder a un Entry
+def set_placeholder(entry, placeholder_text):
+    entry.insert(0, placeholder_text)
+    entry.config(fg='grey')
+
+    def on_focus_in(event):
+        if entry.get() == placeholder_text:
+            entry.delete(0, tk.END)
+            entry.config(fg='black')
+
+    def on_focus_out(event):
+        if entry.get() == "":
+            entry.insert(0, placeholder_text)
+            entry.config(fg='grey')
+
+    entry.bind("<FocusIn>", on_focus_in)
+    entry.bind("<FocusOut>", on_focus_out)
 
 def main():
     root = tk.Tk()
@@ -26,6 +43,9 @@ def main():
 
     entry_func = tk.Entry(frame_input, font=("Helvetica", 12), width=40)
     entry_func.pack(side=tk.LEFT, padx=5)
+
+    # Agregar el placeholder al campo de entrada
+    set_placeholder(entry_func, "Ejemplo: z**2 + 1")
 
     btn_plot = tk.Button(frame_input, text="Graficar", font=font_style, bg="#007BFF", fg="white",
                          command=lambda: plot_function(entry_func.get(), canvas))
