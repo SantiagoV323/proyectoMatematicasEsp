@@ -158,14 +158,3 @@ Prueba ingresando diferentes funciones de \( z \), como:
 - \( f(z) = \sin(z) \)
 
 ---
-
-## 7. Mejoras y Funcionalidades Adicionales
-
-Algunas ideas para extender el proyecto:
-- **Animación**: Visualizar cómo cambia la función conforme \( z \) evoluciona.
-- **Zoom Interactivo**: Permitir al usuario hacer zoom en la gráfica.
-- **Más Análisis Matemáticos**: Incluir la capacidad de encontrar singularidades, polos o ceros de la función.
-
----
-
-Espero que esta guía te sea útil. Si tienes alguna duda o necesitas más ayuda con alguna sección, ¡no dudes en preguntarme!
